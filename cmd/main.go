@@ -22,6 +22,8 @@ func main() {
 		Mailer: mailer,
 	})
 
-	ctx, _ := context.WithTimeout(context.Background(), 5 * time.Minute)
+	ctx, ctxcancel := context.WithTimeout(context.Background(), 5 * time.Minute) // :)
+	defer ctxcancel()
+
 	go server.Run(ctx)
 }
