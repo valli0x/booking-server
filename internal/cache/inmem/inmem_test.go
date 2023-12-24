@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/valli0x/booking-server/models"
+	"github.com/valli0x/booking-server/pkg/models"
 )
 
 func TestInmem(t *testing.T) {

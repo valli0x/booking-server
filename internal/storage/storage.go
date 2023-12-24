@@ -1,6 +1,6 @@
 package storage
 
-import "github.com/valli0x/booking-server/models"
+import "github.com/valli0x/booking-server/pkg/models"
 
 type Storage interface {
 	Book(o models.Order) error

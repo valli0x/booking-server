@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/valli0x/booking-server/models"
+	"github.com/valli0x/booking-server/pkg/models"
 )
 
 func (s *server) createOrder() http.HandlerFunc {

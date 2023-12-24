@@ -10,9 +10,9 @@ import (
 
 	"log"
 
-	cacheinmem "github.com/valli0x/booking-server/cache/inmem"
-	"github.com/valli0x/booking-server/email"
-	storeinmem "github.com/valli0x/booking-server/storage/inmem"
+	cacheinmem "github.com/valli0x/booking-server/internal/cache/inmem"
+	"github.com/valli0x/booking-server/internal/email"
+	storeinmem "github.com/valli0x/booking-server/internal/storage/inmem"
 )
 
 const (

@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
-	cacheinmem "github.com/valli0x/booking-server/cache/inmem"
-	"github.com/valli0x/booking-server/email"
-	"github.com/valli0x/booking-server/httpserver"
-	storeinmem "github.com/valli0x/booking-server/storage/inmem"
+	cacheinmem "github.com/valli0x/booking-server/internal/cache/inmem"
+	"github.com/valli0x/booking-server/internal/email"
+	"github.com/valli0x/booking-server/pkg/httpserver"
+	storeinmem "github.com/valli0x/booking-server/internal/storage/inmem"
 )
 
 func main() {
