@@ -1,4 +1,4 @@
-package http
+package httpserver
 
 import (
 	"context"
@@ -17,12 +17,12 @@ import (
 )
 
 const (
-	TimeoutSeconds = 10
-	IdleTimeout    = 60
-	MaxHeaderBytes = 1024 * 1024
+	timeoutSeconds = 10
+	idleTimeout    = 60
+	maxHeaderBytes = 1024 * 1024
 )
 
-type Server struct {
+type server struct {
 	// server fields
 	addr string
 	srv  *http.Server
@@ -35,33 +35,33 @@ type Server struct {
 type SrvConfig struct {
 	Addr string
 	// services fields
-	store  *storeinmem.InMemoryStorage
-	cache  *cacheinmem.SimpleCache
-	mailer *email.DummyMailer
+	Store  *storeinmem.InMemoryStorage
+	Cache  *cacheinmem.SimpleCache
+	Mailer *email.DummyMailer
 }
 
-func NewServer(cfg *SrvConfig) (*Server, error) {
+func NewServer(cfg *SrvConfig) (*server) {
 	httpServer := &http.Server{
-		MaxHeaderBytes: MaxHeaderBytes,
-		IdleTimeout:    IdleTimeout * time.Second,
-		ReadTimeout:    TimeoutSeconds * time.Second,
-		WriteTimeout:   TimeoutSeconds * time.Second,
+		MaxHeaderBytes: maxHeaderBytes,
+		IdleTimeout:    idleTimeout * time.Second,
+		ReadTimeout:    timeoutSeconds * time.Second,
+		WriteTimeout:   timeoutSeconds * time.Second,
 	}
 
-	s := &Server{
+	s := &server{
 		srv:    httpServer,
 		addr:   cfg.Addr,
-		store:  cfg.store,
-		cache:  cfg.cache,
-		mailer: cfg.mailer,
+		store:  cfg.Store,
+		cache:  cfg.Cache,
+		mailer: cfg.Mailer,
 	}
 
 	s.srv.Handler = s.routers()
 
-	return s, nil
+	return s
 }
 
-func (s *Server) Run(ctx context.Context) {
+func (s *server) Run(ctx context.Context) {
 	listener, err := net.Listen("tcp", s.addr)
 	if err != nil {
 		log.Printf("can't listen on %s. admin server quitting: %v", s.addr, err)
@@ -88,7 +88,7 @@ func (s *Server) Run(ctx context.Context) {
 	log.Printf("server off")
 }
 
-func (s *Server) routers() *chi.Mux {
+func (s *server) routers() *chi.Mux {
 	r := chi.NewRouter()
 	r.Route("/v1", func(r chi.Router) {
 		r.Post("/orders", s.createOrder())

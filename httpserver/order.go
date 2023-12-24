@@ -1,4 +1,4 @@
-package http
+package httpserver
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 	"github.com/valli0x/booking-server/models"
 )
 
-func (s *Server) createOrder() http.HandlerFunc {
+func (s *server) createOrder() http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var o models.Order
 		if err := json.NewDecoder(r.Body).Decode(&o); err != nil {

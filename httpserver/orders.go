@@ -1,4 +1,4 @@
-package http
+package httpserver
 
 import (
 	"encoding/json"
@@ -8,7 +8,7 @@ import (
 	"github.com/go-chi/chi"
 )
 
-func (s *Server) getorders() http.HandlerFunc {
+func (s *server) getorders() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		userID := chi.URLParam(r, "userID")
 		orders, err := s.store.GetOrders(userID)
