@@ -17,6 +17,11 @@ func (s *server) getorders() http.HandlerFunc {
 			log.Println("Error getting orders:", err)
 			return
 		}
+		if orders == nil {
+			http.Error(w, "", http.StatusNotFound)
+			log.Println("User by userID not found")
+			return
+		}
 		if err := json.NewEncoder(w).Encode(orders); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			log.Println("Error encoding orders:", err)
