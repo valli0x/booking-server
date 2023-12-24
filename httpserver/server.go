@@ -10,7 +10,6 @@ import (
 
 	"log"
 
-	"github.com/go-chi/chi"
 	cacheinmem "github.com/valli0x/booking-server/cache/inmem"
 	"github.com/valli0x/booking-server/email"
 	storeinmem "github.com/valli0x/booking-server/storage/inmem"
@@ -40,7 +39,7 @@ type SrvConfig struct {
 	Mailer *email.DummyMailer
 }
 
-func NewServer(cfg *SrvConfig) (*server) {
+func NewServer(cfg *SrvConfig) *server {
 	httpServer := &http.Server{
 		MaxHeaderBytes: maxHeaderBytes,
 		IdleTimeout:    idleTimeout * time.Second,
@@ -86,13 +85,4 @@ func (s *server) Run(ctx context.Context) {
 
 	wg.Wait()
 	log.Printf("server off")
-}
-
-func (s *server) routers() *chi.Mux {
-	r := chi.NewRouter()
-	r.Route("/v1", func(r chi.Router) {
-		r.Post("/orders", s.createOrder())
-		r.Get("/orders/{userID}", s.getorders())
-	})
-	return r
 }

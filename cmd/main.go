@@ -16,13 +16,14 @@ func main() {
 	mailer := email.NewDummyMailer()
 
 	server := httpserver.NewServer(&httpserver.SrvConfig{
-		Addr: ":3000",
-		Store: store,
-		Cache: cache,
+		Addr:   "localhost:8000",
+		Store:  store,
+		Cache:  cache,
 		Mailer: mailer,
 	})
 
-	ctx, ctxcancel := context.WithTimeout(context.Background(), 5 * time.Minute) // :)
+	serverWorkTime := 10 * time.Minute // :)
+	ctx, ctxcancel := context.WithTimeout(context.Background(), serverWorkTime)
 	defer ctxcancel()
 
 	go server.Run(ctx)
