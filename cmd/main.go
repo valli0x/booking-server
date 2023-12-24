@@ -26,5 +26,5 @@ func main() {
 	ctx, ctxcancel := context.WithTimeout(context.Background(), serverWorkTime)
 	defer ctxcancel()
 
-	go server.Run(ctx)
+	server.Run(ctx)
 }
