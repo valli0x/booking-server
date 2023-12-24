@@ -2,8 +2,10 @@ package httpserver
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
+	"net/mail"
 	"time"
 
 	"github.com/valli0x/booking-server/pkg/models"
@@ -15,6 +17,13 @@ func (s *server) createOrder() http.HandlerFunc {
 		if err := json.NewDecoder(r.Body).Decode(&o); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			log.Println("Error decoding order:", err)
+			return
+		}
+
+		// Проверяем поля Order
+		if err := s.validateOrder(&o); err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			log.Println("Error validate order:", err)
 			return
 		}
 
@@ -61,4 +70,28 @@ func (s *server) createOrder() http.HandlerFunc {
 			log.Println("Error sending confirmation:", err)
 		}
 	})
+}
+
+func (s *server) validateOrder(order *models.Order) error {
+	if order.UserID == "" || order.UserEmail == "" ||
+		order.From == "" || order.To == "" || len(order.RoomIDs) == 0 || order.RoomType == "" {
+		return errors.New("not all fields are filled")
+	}
+
+	_, err := mail.ParseAddress(order.UserEmail)
+	if err != nil {
+		return errors.New("invalid email")
+	}
+
+	_, err = time.Parse("2006-01-02", order.From)
+	if err != nil {
+		return errors.New("invalid 'From' date")
+	}
+
+	_, err = time.Parse("2006-01-02", order.To)
+	if err != nil {
+		return errors.New("invalid 'To' date")
+	}
+
+	return nil
 }
