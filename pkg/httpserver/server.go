@@ -63,7 +63,7 @@ func NewServer(cfg *SrvConfig) *server {
 func (s *server) Run(ctx context.Context) {
 	listener, err := net.Listen("tcp", s.addr)
 	if err != nil {
-		log.Printf("can't listen on %s. admin server quitting: %v", s.addr, err)
+		log.Printf("can't listen on %s. server quitting: %v", s.addr, err)
 		return
 	}
 

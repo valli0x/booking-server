@@ -11,6 +11,8 @@ import (
 )
 
 func main() {
+	// ранее в проектах использовался пакет с di
+	// но в данном случае мне нельзя использовать сторонние библиотеки
 	store := storeinmem.NewInMemoryStorage()
 	cache := cacheinmem.NewSimpleCache()
 	mailer := email.NewDummyMailer()
