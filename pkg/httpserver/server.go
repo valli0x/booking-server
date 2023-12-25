@@ -10,9 +10,9 @@ import (
 
 	"log"
 
-	cacheinmem "github.com/valli0x/booking-server/internal/cache/inmem"
+	"github.com/valli0x/booking-server/internal/cache"
 	"github.com/valli0x/booking-server/internal/email"
-	storeinmem "github.com/valli0x/booking-server/internal/storage/inmem"
+	"github.com/valli0x/booking-server/internal/storage"
 )
 
 const (
@@ -26,17 +26,17 @@ type server struct {
 	addr string
 	srv  *http.Server
 	// services fields
-	store  *storeinmem.InMemoryStorage
-	cache  *cacheinmem.SimpleCache
-	mailer *email.DummyMailer
+	store  storage.Storage
+	cache  cache.Cache
+	mailer email.Mailer
 }
 
 type SrvConfig struct {
 	Addr string
 	// services fields
-	Store  *storeinmem.InMemoryStorage
-	Cache  *cacheinmem.SimpleCache
-	Mailer *email.DummyMailer
+	Store  storage.Storage
+	Cache  cache.Cache
+	Mailer email.Mailer
 }
 
 func NewServer(cfg *SrvConfig) *server {
