@@ -81,6 +81,7 @@ func (s *server) Run(ctx context.Context) {
 
 	log.Printf("server listening on %s", s.addr)
 	if err := s.srv.Serve(listener); !errors.Is(err, http.ErrServerClosed) {
+		wg.Done()
 		log.Printf("unexpected (http.Server).Serve error: %v", err)
 	}
 
