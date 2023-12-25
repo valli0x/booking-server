@@ -67,16 +67,17 @@ func (s *server) Run(ctx context.Context) {
 		return
 	}
 
-	var wg sync.WaitGroup
+	wg := &sync.WaitGroup{}
+
 	wg.Add(1)
-	go func() {
+	go func(wg *sync.WaitGroup) {
 		defer wg.Done()
 		<-ctx.Done()
 
 		if err := s.srv.Shutdown(context.Background()); err != nil {
 			log.Printf("HTTP server Shutdown: %v", err)
 		}
-	}()
+	}(wg)
 
 	log.Printf("server listening on %s", s.addr)
 	if err := s.srv.Serve(listener); !errors.Is(err, http.ErrServerClosed) {
