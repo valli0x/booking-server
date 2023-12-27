@@ -8,25 +8,26 @@ import (
 )
 
 type MailerSMTP struct {
-	from, password string
+	smtpServer, smtpPort string
+	from, password       string
 }
 
-func NewMailerSMPT(from, password string) *MailerSMTP {
+func NewMailerSMPT(smtpServer, smtpPort, from, password string) *MailerSMTP {
 	return &MailerSMTP{
-		from:     from,
-		password: password,
+		smtpServer: smtpServer,
+		smtpPort:   smtpPort,
+		from:       from,
+		password:   password,
 	}
 }
 
 func (m *MailerSMTP) SendConfirmation(email string, o models.Order) error {
 	to := email
-	msg := []byte("The order has been accepter")
+	msg := []byte("The order has been accepted")
 
-	smtpServer := "smtp.gmail.com"
-	smtpPort := "587"
-	auth := smtp.PlainAuth("", m.from, m.password, smtpServer)
+	auth := smtp.PlainAuth("", m.from, m.password, m.smtpServer)
 
-	err := smtp.SendMail(smtpServer+":"+smtpPort, auth, m.from, []string{to}, msg)
+	err := smtp.SendMail(m.smtpServer+":"+m.smtpPort, auth, m.from, []string{to}, msg)
 	if err != nil {
 		return err
 	}
