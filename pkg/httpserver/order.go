@@ -36,7 +36,7 @@ func (s *server) createOrder() http.HandlerFunc {
 
 		// Проверка на пересечение времени бронирования для каждой комнаты
 		for _, rid := range o.RoomIDs {
-			orders, _ := s.cache.GetOrders(rid)
+			orders, _ := s.store.GetOrders(rid)
 			for _, order := range orders {
 				fromTime, _ := time.Parse(time.RFC3339, order.From)
 				toTime, _ := time.Parse(time.RFC3339, order.To)
