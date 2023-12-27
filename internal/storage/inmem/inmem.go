@@ -7,7 +7,7 @@ import (
 )
 
 type InMemoryStorage struct {
-	mu     sync.Mutex
+	mu     sync.RWMutex
 	orders map[string][]models.Order
 }
 
@@ -25,7 +25,7 @@ func (s *InMemoryStorage) Book(o models.Order) error {
 }
 
 func (s *InMemoryStorage) GetOrders(userID string) ([]models.Order, error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+	s.mu.RLock()
+	defer s.mu.RUnlock()
 	return s.orders[userID], nil
 }

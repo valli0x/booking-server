@@ -9,7 +9,7 @@ import (
 )
 
 type SimpleCache struct {
-	mu     sync.Mutex
+	mu     sync.RWMutex
 	orders map[string][]models.Order
 }
 
@@ -29,8 +29,8 @@ func (c *SimpleCache) AddOrder(o models.Order) error {
 }
 
 func (c *SimpleCache) GetOrders(roomID string) ([]models.Order, error) {
-	c.mu.Lock()
-	defer c.mu.Unlock()
+	c.mu.RLock()
+	defer c.mu.RUnlock()
 	return c.orders[roomID], nil
 }
 
@@ -101,13 +101,13 @@ func (c *Cache) StartExpirationChecker() {
 		for {
 			time.Sleep(1 * time.Minute) // Check expiration every minute
 
-			c.mu.Lock()
 			for key, item := range c.data {
 				if time.Now().After(item.expiration) {
+					c.mu.Lock()
 					delete(c.data, key)
+					c.mu.Unlock()
 				}
 			}
-			c.mu.Unlock()
 		}
 	}()
 }
